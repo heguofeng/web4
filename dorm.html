@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" type="text/css" href="css/dorm.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script>
+        $(function() {
+            initpage();
+            $(window).resize(function() {
+                initpage();
+            })
+
+            function initpage() {
+                var view_width = document.getElementsByTagName('html')[0].getBoundingClientRect().width;
+                var _html = document.getElementsByTagName('html')[0];
+                view_width > 640 ? _html.style.fontSize = 640 / 16 + 'px' : _html.style.fontSize = view_width / 16 + 'px';
+            }
+        });
+    </script>
+    <style>
+        .mid:after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 1px;
+            height: 2rem;
+            background-color: #999999;
+            z-index: 10;
+        }
+        
+        .mid:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1px;
+            height: 2rem;
+            background-color: #999999;
+            z-index: 10;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="width: 100%;height: 1.8rem;line-height: 1.8rem;font-size: 0.7rem;text-align: center;">学生在寝实况</div>
+    <ul style="background-color:#efefef;border-top:1px solid #999999;">
+        <li style="width: 4rem">楼号</li>
+        <li class="mid" style="width: 8rem;position: relative;">在寝状况(在寝人数/总人数)</li>
+        <li style="width: 4rem">操作</li>
+    </ul>
+    <div class="contair"></div>
+    <script>
+        $(function() {
+            $.ajax({
+                url: 'http://test.dm.zjqq.info/backstage/admin/dm-list?is_api=1',
+                type: 'get',
+                dataType: 'json',
+                success: function(res) {
+                    console.log(res.data['1'].in);
+                    console.log(Object.keys(res.data).length);
+                    for (var key in res.data) {
+                        if (key % 2) {
+                            $('.contair').append('<ul style="background-color:#f8f8f8;">\
+								<li style="width: 4rem" data-id=' + key + '>' + key + '幢</li>\
+								<li class="mid" style="width: 8rem;position: relative;">' + res.data[key].in + '/' + res.data[key].total + '</li>\
+								<li class="bindone" style="width: 4rem;color: #438bc9">查看详情</li>\
+							</ul>')
+                        } else {
+                            $('.contair').append('<ul style="background-color:#fff;">\
+								<li style="width: 4rem" data-id=' + key + '>' + key + '幢</li>\
+								<li class="mid" style="width: 8rem;position: relative;">' + res.data[key].in + '/' + res.data[key].total + '</li>\
+								<li class="bindone" style="width: 4rem;color: #438bc9">查看详情</li>\
+							</ul>')
+                        }
+                    }
+                }
+            })
+            $('.contair').on('click', '.bindone', function() {
+                var id_i = $(this).siblings(0).attr('data-id');
+                console.log(id_i);
+                window.location.href = 'detail.html?id=' + id_i;
+            })
+        })
+    </script>
+</body>
+
+</html>
