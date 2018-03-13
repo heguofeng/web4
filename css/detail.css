@@ -3,35 +3,134 @@ ul,
 tr {
     margin: 0;
     padding: 0;
-    font-family: "Microsoft YaHei";
+    font-family: "Microsoft YaHei", arial, simsun, Tahoma, sans-serif;
     color: #333;
 }
 
 ul {
     display: block;
     width: 100%;
-    height: 1.8rem;
+    height: 2rem;
     clear: both;
-    border-bottom: 1px solid #999999;
 }
 
 li {
     display: block;
     float: left;
-    height: 1.8rem;
-    line-height: 1.8rem;
-    font-size: 0.6rem;
     text-align: center;
     text-decoration: none;
 }
 
+.choose {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    width: 20%;
+    height: 2rem;
+    line-height: 2rem;
+    font-size: .6rem;
+    color: #fff;
+    /* font-weight: 700; */
+}
 
-/* // select{
-// 	display:block;
-// 	background-color:#666;
-// 	width:3rem;
-// 	text-align:center;
-// 	appearance:none;
-// 	-moz-appearance:none;
-// 	-webkit-appearance:none;
-// } */
+.choose img {
+    float: left;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-top: .4rem;
+    margin-right: 5px;
+}
+
+.choose .choose_text {
+    float: left;
+}
+
+.choose .choose_text:hover,
+.choose .choose_text:active {
+    font-weight: 700;
+}
+
+.head {
+    position: relative;
+}
+
+.head .title {
+    width: 100%;
+    height: 2rem;
+    line-height: 2rem;
+    font-size: 0.8rem;
+    text-align: center;
+    background-color: #3EC1D3;
+    color: #fff;
+    font-weight: 700;
+}
+
+.name {
+    width: 25%;
+}
+
+.className {
+    width: 15%;
+}
+
+.grade {
+    width: 15%;
+}
+
+.status {
+    width: 20%;
+}
+
+.active {
+    width: 25%;
+}
+
+.active:hover,
+.active:active {
+    color: #FF165D;
+    font-size: .8rem;
+}
+
+.tableTitle {
+    color: #3EC1D3;
+    font-size: .6rem;
+    height: 1.8rem;
+    line-height: 1.8rem;
+    /* border-bottom: 1px solid #3EC1D3; */
+    box-shadow: 1px 3px 5px #EAEAEA;
+}
+
+.tableTitle_fixed {
+    color: #3EC1D3;
+    font-size: .6rem;
+    height: 1.8rem;
+    line-height: 1.8rem;
+    /* border-bottom: 1px solid #3EC1D3; */
+    box-shadow: 1px 3px 5px #EAEAEA;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    background-color: #fff;
+}
+
+.tableContent {
+    font-size: .7rem;
+    height: 1.8rem;
+    line-height: 1.8rem;
+}
+
+
+/* ul.tableContent:hover {
+    background-color: #F6F7D7;
+} */
+
+.tableContent li img {
+    margin-right: 5px;
+    position: relative;
+    top: 3px;
+}
+
+.weui-toast {
+    font-size: .8rem;
+}

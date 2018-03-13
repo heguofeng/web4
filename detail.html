@@ -6,11 +6,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
     <meta content="telephone=no" name="format-detection">
-    <link rel="stylesheet" href="css/weui.min.css">
-    <link rel="stylesheet" href="css/jquery-weui.css">
-    <link rel="stylesheet" type="text/css" href="css/detail.css">
-    <script type="text/javascript" src="js/jquery.min.js"></script>
-    <script type="text/javascript" src="js/jquery-weui.js"></script>
+    <link rel="stylesheet" href="./css/weui.min.css">
+    <link rel="stylesheet" href="./css/jquery-weui.css">
+    <link rel="stylesheet" type="text/css" href="./css/detail.css">
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/jquery-weui.js"></script>
     <script>
         $(function() {
             initpage();
@@ -25,79 +25,24 @@
             }
         });
     </script>
-    <style>
-        .mid:after {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 1px;
-            height: 1.8rem;
-            background-color: #999999;
-            z-index: 10;
-        }
-        
-        .mid:before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 1px;
-            height: 1.8rem;
-            background-color: #999999;
-            z-index: 10;
-        }
-        
-        select#selectPointOfInterest {
-            float: right;
-            display: block;
-            width: 2.8rem;
-            height: 1.3rem;
-            line-height: 1.3rem;
-            margin-top: 0.25rem;
-            text-indent: 0.1rem;
-            font-size: 0.6rem;
-            padding-left: 0.5rem;
-            padding-right: 0.6rem;
-            text-align: left;
-            vertical-align: middle;
-            border: 0px solid #888888;
-            -moz-border-radius: 6px;
-            -webkit-border-radius: 6px;
-            border-radius: 6px;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            color: #333;
-            outline: none;
-            background: url('img/arrow.png') no-repeat scroll transparent;
-            background-position: 90% center;
-            -webkit-tap-highlight-color: rgba(255, 255, 255, 0.5);
-        }
-    </style>
 </head>
 
 <body>
-    <!-- <select >
-		<option value="0">全部</option>
-		<option value="1">在寝</option>
-		<option value="2">外出</option>
-    </select> -->
     <div class="head">
-        <div class="title" style="float: left;width: 10rem;margin-left: 3rem;line-height: 1.8rem;height: 1.8rem;font-size:0.7rem;color: #333;text-align: center">
-            <!-- <span>1幢学生在寝情况</span> --></div>
-        <select id="selectPointOfInterest" title="Select points of interest nearby">
-    		<option value="0">全部</option>
-    		<option value="1">在寝</option>
-    		<option value="2">外出</option>
-    	</select>
+        <div class="title"></div>
+        <a href="javascript:;" id="choose">
+            <div class="choose">
+                <img src="./img/choose.png" alt="筛选">
+                <div id="choose_text" class="choose_text">筛选</div>
+            </div>
+        </a>
     </div>
-    <ul style="background-color:#efefef;border-top:1px solid #999999 ">
-        <li style="width:4rem">名字</li>
-        <li class="mid" style="width:2.5rem;position: relative;">班级</li>
-        <li style="width:2.5rem">年级</li>
-        <li class="mid status" style="width:3rem;position: relative;">在寝状态</li>
-        <li style="width:4rem; ">更改状态</li>
+    <ul class="tableTitle" id="tableTitle">
+        <li class="name">姓名</li>
+        <li class="className">班级</li>
+        <li class="grade">年级</li>
+        <li class="status">在寝状态</li>
+        <li class="active">更改状态</li>
     </ul>
     <div class="contair">
     </div>
@@ -106,78 +51,12 @@
         <span class="weui-loadmore__tips">正在加载</span>
     </div>
     <script>
-        function GetQueryString(name) {
-            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-            var r = window.location.search.substr(1).match(reg);
-            if (r != null) return unescape(r[2]);
-            return null;
-        }
         $(function() {
             var id_i = GetQueryString('id');
             $('.title').append('<span>' + id_i + '幢学生在寝情况</span>');
             var inital = 0,
                 checkv = 0,
                 page = 1;
-            $('select').change(function() {
-                checkv = $(this).find('option:selected').val();
-                if (checkv != 'inital') {
-
-                    $.ajax({
-                        //id-幢，status-在寝状态,page页数
-                        url: 'http://test.dm.zjqq.info/backstage/admin/dm-detail?is_api=' + 1 + '&id=' + id_i + '&status=' + checkv + '&page_no=' + 1,
-                        type: 'get',
-                        dataType: 'json',
-                        success: function(res) {
-                            console.log(res.data.length);
-                            $('.contair').html('');
-                            if (res.data.length < 20) {
-                                $(".weui-loadmore").hide();
-                            }
-                            if (res.data.length >= 20) {
-                                $(".weui-loadmore").show();
-                            }
-                            for (var i = 0; i < res.data.length; i++) {
-                                if (res.data[i].status == '1') {
-                                    $('.contair').append('<ul style="background-color:#fff;">\
-										<li style="width:4rem">' + res.data[i].name + '</li>\
-										<li class="mid" style="width:2.5rem;position: relative;">' + res.data[i].class + '</li>\
-										<li style="width:2.5rem">' + res.data[i].grade + '</li>\
-										<li class="mid status" style="width:3rem;position: relative;">在寝</li>\
-										<li class="active" data-id="' + res.data[i].id + '" style="width:4rem;color:#438bc9 ">更改状态</li>\
-									</ul>')
-                                } else {
-                                    $('.contair').append('<ul style="background-color:#fff;">\
-										<li style="width:4rem">' + res.data[i].name + '</li>\
-										<li class="mid" style="width:2.5rem;position: relative;">' + res.data[i].class + '</li>\
-										<li style="width:2.5rem">' + res.data[i].grade + '</li>\
-										<li class="mid status" style="width:3rem;position: relative;">外出</li>\
-										<li class="active" data-id="' + res.data[i].id + '" style="width:4rem;color:#438bc9 ">更改状态</li>\
-									</ul>')
-                                }
-                            }
-                        }
-                    })
-                }
-                inital = checkv;
-            })
-            $('.contair').on('click', '.active', function() {
-                var id_name = $(this).attr('data-id');
-                var isSure = confirm('确定更改状态吗？')
-                if (isSure) {
-                    $.ajax({
-                        type: 'get',
-                        url: 'http://test.dm.zjqq.info/backstage/admin/change-status?id=' + id_name,
-                        dataType: 'json',
-                        success: function(res) {
-                            if (res['code'] == '0') {
-                                alert('修改成功', location.reload())
-                            } else {
-                                alert('修改失败请重新操作')
-                            }
-                        }
-                    })
-                }
-            })
 
             //进入页面加载  
             load(id_i, page, checkv);
@@ -190,47 +69,157 @@
                     page = page + 1;
                     load(id_i, page, checkv);
                     loading = false;
-                }, 1000); //模拟延迟    
+                }, 500); //模拟延迟    
             });
-            //ajax加载数据
-            function load(id_i, page, checkv) {
-                console.log(checkv);
+
+
+        });
+        //自动根据下拉距离显示标题
+        $(window).scroll(function() {
+            var top = $(document).scrollTop();
+            var tableTitle = $("#tableTitle");
+            if (top > 50) {
+                tableTitle.addClass("tableTitle_fixed");
+                tableTitle.removeClass("tableTitle");
+            } else {
+                tableTitle.addClass("tableTitle");
+                tableTitle.removeClass("tableTitle_fixed");
+            }
+        });
+        $('.contair').on('click', '.active', function() {
+            var data_id = $(this).attr('data-id');
+            var data_name = $(this).attr('data-name');
+            console.log("data_id")
+                // console.log(data_name)
+            $.confirm("您确定要改变 " + data_name + " 同学的状态吗？", function() {
                 $.ajax({
-                    url: 'http://test.dm.zjqq.info/backstage/admin/dm-detail?is_api=' + 1 + '&id=' + id_i + '&status=' + checkv + '&page_no=' + page,
-                    type: "get",
-                    dataType: "json",
+                    type: 'get',
+                    url: 'http://test.dm.zjqq.info/backstage/admin/change-status?id=' + data_id,
+                    dataType: 'json',
                     success: function(res) {
-                        console.log(res);
-                        if (res.data.length < 20) {
-                            $(".weui-loadmore").hide();
-                        }
-                        if (res.data.length >= 20) {
-                            $(".weui-loadmore").show();
-                        }
-                        for (var i = 0; i < res.data.length; i++) {
-                            if (res.data[i].status == '1') {
-                                $('.contair').append('<ul style="background-color:#fff;">\
-	                    			<li style="width:4rem">' + res.data[i].name + '</li>\
-	                    			<li class="mid" style="width:2.5rem;position: relative;">' + res.data[i].class + '</li>\
-	                    			<li style="width:2.5rem">' + res.data[i].grade + '</li>\
-	                    			<li class="mid status" style="width:3rem;position: relative;">在寝</li>\
-	                    			<li class="active" data-id="' + res.data[i].id + '" style="width:4rem;color:#438bc9 ">更改状态</li>\
-	                    		</ul>')
-                            } else {
-                                $('.contair').append('<ul style="background-color:#fff;">\
-	                    			<li style="width:4rem">' + res.data[i].name + '</li>\
-	                    			<li class="mid" style="width:2.5rem;position: relative;">' + res.data[i].class + '</li>\
-	                    			<li style="width:2.5rem">' + res.data[i].grade + '</li>\
-	                    			<li class="mid status" style="width:3rem;position: relative;">外出</li>\
-	                    			<li class="active" data-id="' + res.data[i].id + '" style="width:4rem;color:#438bc9 ">更改状态</li>\
-	                    		</ul>')
-                            }
+                        if (res['code'] == '0') {
+                            $.toast("操作成功", 1000, function() {
+                                location.reload();
+                            });
+
+                        } else {
+                            $.toast("修改失败", "forbidden");
                         }
                     }
                 })
-            }
-        })
+            });
+        });
+
+        function GetQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+            return null;
+        }
+        //ajax加载数据
+        function load(id_i, page, checkv) {
+            console.log(checkv);
+            $.ajax({
+                url: 'http://test.dm.zjqq.info/backstage/admin/dm-detail?is_api=' + 1 + '&id=' + id_i + '&status=' + checkv + '&page_no=' + page,
+                type: "get",
+                dataType: "json",
+                success: function(res) {
+                    console.log(res);
+                    if (res.data.length < 20) {
+                        $(".weui-loadmore").hide();
+                    }
+                    if (res.data.length >= 20) {
+                        $(".weui-loadmore").show();
+                    }
+                    for (var i = 0; i < res.data.length; i++) {
+                        var statusNew = res.data[i].status == 1 ? "在寝" : "外出";
+                        $('.contair').append('<ul class="tableContent" >\
+										<li class="name">' + res.data[i].name + '</li>\
+										<li class="className">' + res.data[i].class + '</li>\
+										<li class="grade">' + res.data[i].grade + '</li>\
+										<li class="status">' + statusNew + '</li>\
+										<li class="active" data-name="' + res.data[i].name + '" data-id="' + res.data[i].id + '"><img src="./img/change.png" width="16px"/>更改</li>\
+									</ul>');
+                    }
+                    changeColor();
+                }
+            })
+        }
+
+        //定义字体变色事件
+        function changeColor() {
+            $('ul').each(function(i) {
+                if ($(this).children("li.status").text() == "外出") {
+                    $(this).children("li.status").css("color", "#FF9A00")
+                } else {
+                    $(this).children("li.status").css("color", "#3EC1D3")
+                }
+            })
+        }
+        //加载筛选框
+        $("#choose").on('click', function() {
+            // loading
+            $(".weui-loadmore").show();
+            var resultNum = 0;
+            weui.picker([{
+                label: '全部',
+                value: '全部',
+            }, {
+                label: '在寝',
+                value: '在寝'
+            }, {
+                label: '外出',
+                value: '外出'
+            }], {
+                defaultValue: ['全部'],
+                onConfirm: function(result) {
+                    if (result == "全部") {
+                        resultNum = 0;
+                    } else if (result == "在寝") {
+                        resultNum = 1;
+                    } else {
+                        resultNum = 2;
+                    }
+                    // console.log(result)
+                    checkv = resultNum;
+                    if (checkv != 'inital') {
+                        $.ajax({
+                            //id-幢，status-在寝状态,page页数
+                            url: 'http://test.dm.zjqq.info/backstage/admin/dm-detail?is_api=' + 1 + '&id=' + id_i + '&status=' + checkv + '&page_no=' + 1,
+                            type: 'get',
+                            dataType: 'json',
+                            success: function(res) {
+                                // console.log(res.data.length);
+                                $(".weui-loadmore").hide();
+                                $('.contair').html('');
+                                if (res.data.length < 20) {
+                                    $(".weui-loadmore").hide();
+                                }
+                                if (res.data.length >= 20) {
+                                    $(".weui-loadmore").show();
+                                }
+                                for (var i = 0; i < res.data.length; i++) {
+                                    var statusNew = res.data[i].status == 1 ? "在寝" : "外出";
+                                    $('.contair').append('<ul class="tableContent">\
+                                        <li class="name" data-name="' + res.data[i].name + '">' + res.data[i].name + '</li>\
+										<li class="className">' + res.data[i].class + '</li>\
+										<li class="grade">' + res.data[i].grade + '</li>\
+										<li class="status">' + statusNew + '</li>\
+										<li class="active" data-id="' + res.data[i].id + '"><img src="./img/change.png" width="16px"/>更改</li>\
+									</ul>')
+                                }
+                                changeColor();
+                            }
+                        });
+                    }
+                    inital = checkv;
+                    $("#choose_text").text(result)
+                },
+                id: 'choose'
+            });
+        });
     </script>
 </body>
+<script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
 
 </html>
